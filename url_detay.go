@@ -26,7 +26,6 @@ func main() {
 
 	input := strings.TrimSpace(*urlFlag)
 
-	// Protokol yoksa ekle
 	if !strings.HasPrefix(strings.ToLower(input), "http://") &&
 		!strings.HasPrefix(strings.ToLower(input), "https://") {
 		input = "https://" + input
@@ -40,12 +39,10 @@ func main() {
 	targetURL := parsedURL.String()
 	fmt.Println("Hedef URL:", targetURL)
 
-	// Klasörler
 	os.MkdirAll("ekran_goruntusu", os.ModePerm)
 	os.MkdirAll("html", os.ModePerm)
 	os.MkdirAll("url_text", os.ModePerm)
 
-	// Güvenli dosya adı
 	safeName := parsedURL.Host
 	if parsedURL.Path != "" && parsedURL.Path != "/" {
 		safeName += strings.ReplaceAll(parsedURL.Path, "/", "_")
@@ -55,7 +52,6 @@ func main() {
 	screenPath := filepath.Join("ekran_goruntusu", safeName+".png")
 	urlPath := filepath.Join("url_text", safeName+".txt")
 
-	// Chrome ayarları
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Headless,
 		chromedp.DisableGPU,
@@ -91,7 +87,6 @@ func main() {
 	fmt.Println("✓ HTML:", htmlPath)
 	fmt.Println("✓ Screenshot:", screenPath)
 
-	// Link çıkarma
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(htmlContent))
 	f, _ := os.Create(urlPath)
 	defer f.Close()
